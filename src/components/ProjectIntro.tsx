@@ -52,7 +52,7 @@ function Stat({ from, to, suffix = '', was, label, start, delay }: (typeof stats
           </motion.span>
         )}
       </p>
-      <p className="mx-auto mt-3 max-w-[20ch] text-xs font-medium text-muted-foreground">{was}</p>
+      <p className="mx-auto mt-3 max-w-[22ch] text-sm font-medium text-muted-foreground">{was}</p>
     </FadeIn>
   )
 }

@@ -18,14 +18,11 @@ export function SearchExperience() {
           </FadeIn>
         </div>
         <Panel className="lg:col-span-7">
-          {/* layered composition with a tinted blob behind, as in the reference landing */}
-          <div className="relative rounded-[28px] bg-tint-sand p-6 sm:p-10 lg:p-14">
-            <div aria-hidden className="absolute -top-10 -right-10 size-64 rounded-full bg-tint-clay blur-3xl" />
-            <Shot src="/ui/t-search-form.webp" alt="Search form: check-in, check-out, guests, Search rooms" width={1600} height={347} className="relative" />
-            {/* The nav pill is 12:1, so it gets its own full-width row; squeezed into a
-                column it collapses into an unreadable sliver. */}
-            <Shot src="/ui/d-nav.webp" alt="Navigation with the stay as a pill" width={2000} height={156} className="relative mt-5 rounded-full" />
-            <Shot src="/ui/m-search-form.webp" alt="Mobile search card" width={900} height={482} className="relative mt-5 w-[62%] sm:w-[48%]" />
+          {/* One capture carries all three bullets: the stay collapsed into the nav pill,
+              and the single check-in/check-out calendar open beneath it. */}
+          <div className="relative overflow-hidden rounded-[28px] bg-tint-sand p-5 sm:p-8 lg:p-10">
+            <div aria-hidden className="absolute -top-16 -right-16 size-72 rounded-full bg-tint-clay blur-3xl" />
+            <Shot src="/ui/d-search-calendar.webp" alt="The stay set in the navigation pill, with the check-in and check-out calendar open below it" width={1284} height={1124} className="relative" />
           </div>
         </Panel>
       </div>

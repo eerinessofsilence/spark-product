@@ -97,53 +97,51 @@ function Money({ value, className = '' }: { value: string; className?: string })
   )
 }
 
+/* Filled marks on a 24-grid, same language as the principle cards: solid
+   shapes, holes cut with even-odd so the tint shows through. */
 function IconCamera({ className = 'size-7' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
-      <path d="M4 7a1.5 1.5 0 0 1 1.5-1.5h1.4l.7-1.1a1 1 0 0 1 .84-.4h2.14a1 1 0 0 1 .84.4l.7 1.1h1.4A1.5 1.5 0 0 1 16 7v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 4 13.5V7Z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="10" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.6" />
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      <path fillRule="evenodd" d="M9.2 3.5h5.6a1 1 0 0 1 .83.44L16.7 5.5H18a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-9a3 3 0 0 1 3-3h1.3l1.07-1.56a1 1 0 0 1 .83-.44ZM12 8.8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z" />
+      <circle cx="12" cy="12.8" r="2.1" />
     </svg>
   )
 }
 function IconSpace({ className = 'size-7' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
-      <path d="M4 7.5V5a1 1 0 0 1 1-1h2.5M16 7.5V5a1 1 0 0 0-1-1h-2.5M4 12.5V15a1 1 0 0 0 1 1h2.5M16 12.5V15a1 1 0 0 1-1 1h-2.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      <path d="M5 3.5h5a1.5 1.5 0 0 1 0 3H6.5V10a1.5 1.5 0 0 1-3 0V5A1.5 1.5 0 0 1 5 3.5ZM14 3.5h5A1.5 1.5 0 0 1 20.5 5v5a1.5 1.5 0 0 1-3 0V6.5H14a1.5 1.5 0 0 1 0-3ZM5 12.5A1.5 1.5 0 0 1 6.5 14v3.5H10a1.5 1.5 0 0 1 0 3H5A1.5 1.5 0 0 1 3.5 19v-5A1.5 1.5 0 0 1 5 12.5Zm14 0a1.5 1.5 0 0 1 1.5 1.5v5a1.5 1.5 0 0 1-1.5 1.5h-5a1.5 1.5 0 0 1 0-3h3.5V14a1.5 1.5 0 0 1 1.5-1.5Z" />
     </svg>
   )
 }
 function IconAmenities({ className = 'size-7' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
-      <rect x="4" y="4" width="5" height="5" rx="1.3" stroke="currentColor" strokeWidth="1.6" />
-      <rect x="11" y="4" width="5" height="5" rx="1.3" stroke="currentColor" strokeWidth="1.6" />
-      <rect x="4" y="11" width="5" height="5" rx="1.3" stroke="currentColor" strokeWidth="1.6" />
-      <rect x="11" y="11" width="5" height="5" rx="1.3" stroke="currentColor" strokeWidth="1.6" />
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      <rect x="3.5" y="3.5" width="7.5" height="7.5" rx="2.2" />
+      <rect x="13" y="3.5" width="7.5" height="7.5" rx="2.2" />
+      <rect x="3.5" y="13" width="7.5" height="7.5" rx="2.2" />
+      <rect x="13" y="13" width="7.5" height="7.5" rx="2.2" />
     </svg>
   )
 }
 function IconPricing({ className = 'size-7' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
-      <path d="M4 4h5.17a1 1 0 0 1 .71.29l6 6a1 1 0 0 1 0 1.42l-4.17 4.17a1 1 0 0 1-1.42 0l-6-6A1 1 0 0 1 4 9.17V4Z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="7.3" cy="7.3" r="1" fill="currentColor" />
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      <path fillRule="evenodd" d="M4.5 3.5h6.6a2 2 0 0 1 1.41.59l7.5 7.5a2 2 0 0 1 0 2.82l-5.6 5.6a2 2 0 0 1-2.82 0l-7.5-7.5A2 2 0 0 1 3.5 11.1V4.5a1 1 0 0 1 1-1ZM8 6.4a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2Z" />
     </svg>
   )
 }
 function IconCancellation({ className = 'size-7' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
-      <path d="M10 3.3 15.5 5v4.2c0 3.6-2.3 5.9-5.5 6.9-3.2-1-5.5-3.3-5.5-6.9V5L10 3.3Z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M7.3 10 9 11.7l3.2-3.4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      <path fillRule="evenodd" d="M12 2.6l7 2.6v5.4c0 4.6-3 7.9-7 9.3-4-1.4-7-4.7-7-9.3V5.2l7-2.6Zm-4.1 9 1.3-1.3 2.5 2.5 4.6-4.6 1.3 1.3-5.9 5.9-3.8-3.8Z" />
     </svg>
   )
 }
 function IconAvailability({ className = 'size-7' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
-      <rect x="4" y="5" width="12" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-      <path d="M4 8.3h12M7 3.5v3M13 3.5v3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-      <path d="M7.3 11.5 9 13.2l3.5-3.7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      <path fillRule="evenodd" d="M7 2.5a1 1 0 0 1 1 1V5h8V3.5a1 1 0 0 1 2 0V5h.5A2.5 2.5 0 0 1 21 7.5v11a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 18.5v-11A2.5 2.5 0 0 1 5.5 5H6V3.5a1 1 0 0 1 1-1ZM3 9.4h18v1.3H3V9.4Zm5.6 4.8 1.2-1.2 2.2 2.2 4.7-4.7 1.2 1.2-5.9 5.9-3.4-3.4Z" />
     </svg>
   )
 }
@@ -207,7 +205,7 @@ export function RoomDetails() {
             className="group flex flex-col items-center text-center"
           >
             <motion.div whileHover={{ y: -6 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }} className={`relative flex size-24 items-center justify-center rounded-full shadow-soft ring-1 ring-ink/5 transition-shadow duration-300 group-hover:shadow-soft-lg sm:size-28 lg:size-32 ${toneClasses[p.tone]}`}>
-              <p.icon className="size-8 transition-transform duration-300 group-hover:scale-110 sm:size-9 lg:size-10" />
+              <p.icon className="size-10 transition-transform duration-300 group-hover:scale-110 sm:size-12 lg:size-14" />
             </motion.div>
             <h3 className="mt-5 text-2xl font-semibold tracking-tight">{p.title}</h3>
             <p className="mt-2 max-w-[28ch] text-base leading-relaxed text-muted-foreground">{p.text}</p>

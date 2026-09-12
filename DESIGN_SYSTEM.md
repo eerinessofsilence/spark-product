@@ -104,8 +104,7 @@ Rules:
 | `.text-display` (utility) | weight 700, tracking `-0.028em`, leading `1.05` |
 | `h1`–`h3` (base layer) | display stack, weight 700, tracking `-0.022em` |
 | Body | weight 400, `leading-relaxed` |
-| Nav pills (hero header, dark tone) | `font-[450]`, tracking `0.01em`, uppercase |
-| Nav links (floating nav, light tone) | `font-medium`, sentence case, no tracking |
+| Nav links (hero header and floating nav — one shared style) | `font-medium`, sentence case, no tracking |
 | Eyebrows / step labels | `text-xs`, uppercase, `tracking-[0.05em]` → `sm:tracking-[0.12em]` |
 | Hero wordmark | Jost 900, uppercase, leading `0.915`, tracking `-0.012em` |
 
@@ -149,17 +148,17 @@ eyebrows, no italic accent word, no kicker line above the heading.
 
 ### Container
 
-Three fixed horizontal padding tiers, applied flat (no responsive step):
+Two fixed horizontal padding tiers, applied flat (no responsive step):
 
 | Tier | Padding | Where |
 | --- | --- | --- |
-| Hero | `32px` (`px-8`) | `--hero-pad` in `.hero-card` — the hero section only |
-| Content | `48px` (`px-12`) | `.container-site` — the standard section container |
-| Narrow | `64px` (`px-16`) | `.container-narrow` — text-heavy/single-column sections |
+| Content | `32px` (`px-8`) | `.container-site` — the standard section container, the floating nav, and the hero (`--hero-pad` is an alias of the same value) |
+| Narrow | `48px` (`px-12`) | `.container-narrow` — text-heavy/single-column sections |
 
-`.container-site` and `.container-narrow` both cap at `max-width: 1400px`, centered, differing
-only in `padding-inline`. The floating nav uses a slightly tighter `max-w-[1360px]` so it reads
-as inset.
+`.container-site` and `.container-narrow` are **flat `padding-inline`, no `max-width`** — content
+runs full-bleed at every viewport width, so the inset is exactly the padding value and nothing
+else (no auto-margin from a width cap stacking on top of it). The floating nav and the hero header
+use the same `px-8` directly (no wrapping `max-w-*`), so both read as one header at any width.
 
 ### Vertical rhythm
 

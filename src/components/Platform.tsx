@@ -4,8 +4,8 @@ import { FadeIn, Panel } from './motion'
 import { ArrowRight } from './ui'
 
 const tiles = [
-  { title: 'Search', text: 'Dates, guests, one button.', src: '/ui/d-home-vp.webp', href: '#search', span: 'lg:col-span-5', fit: 'object-cover object-left-top' },
-  { title: 'Rooms', text: 'Filters, grid or list, priced for the stay.', src: '/ui/d-rooms-grid.webp', href: '#rooms', span: 'lg:col-span-7', fit: 'object-cover object-top' },
+  { title: 'Search', text: 'Dates, guests, one button.', src: '/ui/d-tile-search.webp', href: '#search', span: 'lg:col-span-5', fit: 'object-cover object-top' },
+  { title: 'Rooms', text: 'Filters, grid or list, priced for the stay.', src: '/ui/d-tile-rooms.webp', href: '#rooms', span: 'lg:col-span-7', fit: 'object-cover object-top' },
   { title: 'Room details', text: 'Gallery, 360°, amenities, policies.', src: '/ui/d-room-gallery.webp', href: '#room', span: 'lg:col-span-7', fit: 'object-cover object-top' },
   { title: 'Services', text: 'Priced per stay, guest or night.', src: '/ui/d-room-services.webp', href: '#services', span: 'lg:col-span-5', fit: 'object-cover object-left-top' },
   { title: 'Checkout', text: 'Six steps, no account, server-side recheck.', src: '/ui/d-step-5.webp', href: '#flow', span: 'lg:col-span-5', fit: 'object-cover object-top' },

@@ -51,7 +51,7 @@ export function ProductPrinciples() {
   return (
     <section id="principles" className="container-site pt-32 sm:pt-40 lg:pt-52" aria-labelledby="principles-heading">
       <AnimatedHeading id="principles-heading" className="text-display max-w-[14ch] text-4xl sm:text-5xl lg:text-6xl" text="Four things every screen has to be." />
-      <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="mt-14 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {principles.map((p, i) => (
           <motion.li
             key={p.title}

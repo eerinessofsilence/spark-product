@@ -90,11 +90,13 @@ export function Pricing() {
 
   return (
     <section id="pricing" className="container-site pt-32 sm:pt-40 lg:pt-52" aria-labelledby="pricing-heading">
-      <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
-        <div className="lg:col-span-7">
+      {/* Toggle sits on the heading's baseline row from lg; the heading is a single line
+          there, so a flex row is safer than a 12-col grid that used to split at 1024. */}
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <div className="min-w-0">
           <AnimatedHeading id="pricing-heading" className="text-display text-4xl sm:text-5xl lg:text-6xl" text="One flat fee. No commission." />
         </div>
-        <div className="lg:col-span-5">
+        <div className="shrink-0 lg:pb-2">
           <Reveal delay={140}>
             <div role="group" aria-label="Billing period" className="inline-flex items-center rounded-full bg-card p-1 shadow-soft">
               {[
@@ -153,7 +155,7 @@ export function Pricing() {
 
                 <div className="mt-8">
                   <Button
-                    href={p.monthly === null ? 'mailto:stay@asteriacove.example' : STAYSPHERE_URL}
+                    href={p.monthly === null ? 'mailto:stay@asteriacove.example' : `${STAYSPHERE_URL}?plan=${p.name.toLowerCase()}`}
                     external={p.monthly !== null}
                     variant={p.featured ? 'inverse' : 'primary'}
                     size="lg"
@@ -178,11 +180,11 @@ export function Pricing() {
       </ul>
 
       <Reveal delay={120} className="mt-16 grid gap-10 lg:mt-20 lg:grid-cols-12">
-        <div className="lg:col-span-4">
+        <div className="lg:col-span-3">
           <h3 className="text-2xl font-semibold tracking-tight">Questions hotels ask first.</h3>
           <p className="mt-3 max-w-xs text-base leading-relaxed text-muted-foreground">Prices are indicative for the concept product and shown in euros, excluding VAT.</p>
         </div>
-        <div className="lg:col-span-8"><FAQ items={faqs as [string, string][]} /></div>
+        <div className="lg:col-span-9"><FAQ items={faqs as [string, string][]} /></div>
       </Reveal>
     </section>
   )

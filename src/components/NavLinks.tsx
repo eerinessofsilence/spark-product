@@ -2,34 +2,18 @@ import { motion, type TargetAndTransition, type Transition } from 'motion/react'
 import { useState } from 'react'
 import { NAV_LINKS } from '../lib/nav'
 
-type Tone = 'dark' | 'light'
-
-const tones: Record<Tone, { link: string; lit: string; glider: string }> = {
-  dark: {
-    link: 'h-11 px-4 text-sm font-[450] tracking-[0.01em] uppercase bg-[#0b0b0b] text-[#e6e6e6] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.045)] xl:px-[22px] xl:text-base',
-    lit: 'text-white',
-    glider: 'bg-[#232323]',
-  },
-  light: {
-    link: 'px-3.5 py-2 text-sm font-medium text-ink/70',
-    lit: 'text-ink',
-    glider: 'bg-stone',
-  },
-}
-
 /**
- * The section links, shared by both headers. A single highlight glides
- * between links as the pointer moves (and rests on the section in view when
- * `active` is given); each label rolls up and is replaced from below on hover.
+ * The section links, shared by both headers (hero and floating) so they
+ * read as one nav. A single highlight glides between links as the pointer
+ * moves (and rests on the section in view when `active` is given); each
+ * label rolls up and is replaced from below on hover.
  */
 export function NavLinks({
-  tone,
   active,
   intro,
   className = '',
   label,
 }: {
-  tone: Tone
   /** href of the section currently in view; the highlight rests there. */
   active?: string
   /** Per-link entrance for the hero intro: initial/animate/transition. */
@@ -39,7 +23,6 @@ export function NavLinks({
 }) {
   const [hover, setHover] = useState<string | null>(null)
   const current = hover ?? active ?? null
-  const t = tones[tone]
 
   return (
     <nav className={`flex items-center gap-2 ${className}`} aria-label={label} onMouseLeave={() => setHover(null)}>
@@ -54,14 +37,14 @@ export function NavLinks({
             onHoverStart={() => setHover(l.href)}
             onFocus={() => setHover(l.href)}
             onBlur={() => setHover(null)}
-            className={`group relative inline-flex shrink-0 items-center rounded-full whitespace-nowrap transition-colors duration-300 ${t.link} ${lit ? t.lit : ''}`}
+            className={`group relative inline-flex shrink-0 items-center rounded-full px-3.5 py-2 text-sm font-medium whitespace-nowrap text-ink/70 transition-colors duration-300 ${lit ? 'text-ink' : ''}`}
             {...entrance}
           >
-            {lit && t.glider && (
+            {lit && (
               <motion.span
-                layoutId={`nav-glider-${tone}`}
+                layoutId={`nav-glider-${label}`}
                 aria-hidden
-                className={`absolute inset-0 rounded-full ${t.glider}`}
+                className="absolute inset-0 rounded-full bg-stone"
                 transition={{ type: 'spring', stiffness: 420, damping: 34 }}
               />
             )}

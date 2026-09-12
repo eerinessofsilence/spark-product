@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { BOOKING_URL, STAYSPHERE_URL } from '../lib/links'
 
 type Link = { label: string; href?: string; badge?: 'New' | 'Soon'; external?: boolean }
-type Column = { title: string; links: Link[] }
+type Column = { title: string; links: Link[]; note?: string }
 
 /**
  * Only real destinations: the sections of this page, the live demo, and a
@@ -37,11 +37,8 @@ const columns: Column[] = [
     title: 'Company',
     links: [
       { label: 'Contact', href: 'mailto:stay@asteriacove.example' },
-      { label: 'Help centre', badge: 'Soon' },
-      { label: 'Integrations', badge: 'Soon' },
-      { label: 'Changelog', badge: 'Soon' },
-      { label: 'Blog', badge: 'Soon' },
     ],
+    note: 'Help centre, integrations, changelog and blog are on the way.',
   },
 ]
 
@@ -129,6 +126,7 @@ export function Footer() {
                     </li>
                   ))}
                 </ul>
+                {col.note && <p className="mt-5 max-w-[26ch] text-sm leading-snug text-white/40">{col.note}</p>}
               </div>
             ))}
           </nav>

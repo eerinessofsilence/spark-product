@@ -52,7 +52,7 @@
   --font-hero-family: "Jost";
   --font-hero-stack: var(--font-hero-family), "Futura", "Avenir Next", "Century Gothic", var(--font-ui-stack);
 
-  /* Hero card: inset from the viewport edges */
+  /* Hero card: vertical inset from the viewport edges (sides use the content tier) */
   --hero-inset: 12px;
 }
 
@@ -106,6 +106,9 @@
 @layer base {
   html { scroll-behavior: smooth; }
   html, body { overflow-x: clip; }
+  /* Anchor targets land below the floating nav (its top offset + pill height + a breath). */
+  main section[id] { scroll-margin-top: 84px; }
+  @media (width >= 40rem) { main section[id] { scroll-margin-top: 108px; } }
   body {
     background-color: var(--canvas);
     color: var(--ink);
@@ -128,18 +131,16 @@
   font-weight: 700;
   line-height: 1.05;
 }
+/* Flat padding, no max-width: the inset is the padding, full stop — no
+   hidden auto-margin from a width cap stacking on top of it. */
 @utility container-site {
-  max-width: 1400px;
-  margin-inline: auto;
-  padding-inline: 3rem;
+  padding-inline: 2rem;
 }
 
-/* Narrow content: same 1400px column, deeper inset so the measure reads
+/* Narrow content: same full-bleed rule, deeper inset so the measure reads
    tighter — for text-heavy or single-column sections. */
 @utility container-narrow {
-  max-width: 1400px;
-  margin-inline: auto;
-  padding-inline: 4rem;
+  padding-inline: 3rem;
 }
 
 /* Scroll reveal — restrained fade/rise, respects reduced motion */
@@ -237,27 +238,33 @@
    Geometry is in container units (cqw/cqh) so the composition keeps its
    proportions at every viewport.
 ------------------------------------------------------------------- */
-.hero-shell { padding: var(--hero-inset); }
-.hero-card {
-  --hero-head: 64px;
+/* Custom properties live here, not on .hero-card, so the standalone
+   .hero-head sibling (see below) can read them too. */
+.hero-shell {
+  --hero-head: 56px;
   --hero-r: 32px;
-  --hero-pad: 32px;
+  --hero-pad: 2rem; /* same 32px as .container-site: the hero is not its own tier */
+  --hero-head-gap: 10px;
+  /* Sides sit on the same 32px as every other section; only the vertical inset is the hero's own. */
+  padding-block: var(--hero-inset);
+  padding-inline: var(--hero-pad);
+}
+@media (width >= 64rem) {
+  .hero-shell { --hero-head: 72px; --hero-r: 44px; }
+}
+.hero-card {
   position: relative;
   container-type: size;
   overflow: hidden;
   isolation: isolate;
-  height: calc(100svh - var(--hero-inset) * 2);
-  min-height: 680px;
+  height: calc(100svh - var(--hero-inset) * 2 - var(--hero-head) - var(--hero-head-gap));
+  min-height: 606px;
   border-radius: var(--hero-r);
   background: #0f0f0f;
   color: #e4e4e2;
 }
 @media (width >= 64rem) {
-  .hero-card {
-    --hero-head: 92px;
-    --hero-r: 44px;
-    min-height: 780px;
-  }
+  .hero-card { min-height: 678px; }
 }
 /* Intro: the card fades in as a header-height strip, then grows down. */
 .hero-card.is-intro {
@@ -271,16 +278,12 @@
   to { clip-path: inset(0 0 0 0 round var(--hero-r)); }
 }
 
+/* A separate pill sitting above the photo card, not the top slice of the
+   same card shape — a small gap (--hero-head-gap) keeps them apart. The
+   pill itself is styled in HeroHeader.tsx with the same classes as the
+   floating Nav; this just places it. */
 .hero-head {
-  position: absolute;
-  inset: 0 0 auto 0;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  height: var(--hero-head);
-  padding-inline: var(--hero-pad);
-  background: #fff;
-  border-bottom: 1px solid rgb(0 0 0 / 0.06);
+  margin-bottom: var(--hero-head-gap);
 }
 
 /* The photo fills the card edge to edge; the card's own overflow-hidden
@@ -308,12 +311,12 @@
   pointer-events: none;
   background:
     linear-gradient(90deg, rgb(0 0 0 / 0.45) 0%, rgb(0 0 0 / 0.2) 38%, rgb(0 0 0 / 0) 68%),
-    linear-gradient(0deg, rgb(0 0 0 / 0.38) 0%, rgb(0 0 0 / 0) 42%);
+    linear-gradient(0deg, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.22) 30%, rgb(0 0 0 / 0) 52%);
 }
 
 .hero-title {
   position: absolute;
-  top: calc(var(--hero-head) + 6cqh);
+  top: 6cqh;
   left: calc(var(--hero-pad) + 2.4cqw);
   z-index: 2;
   margin: 0;
@@ -344,27 +347,14 @@
 @media (width >= 64rem) {
   .hero-slide-card { bottom: 3.7cqw; left: auto; width: 25.4cqw; }
 }
-/* The thumb shows the same photo as the full-bleed background behind it, so
-   without its own edge it reads as a torn hole in that photo rather than a
-   floating preview tile — a thin border plus a lift shadow settle it apart. */
-.hero-slide-thumb {
-  position: relative;
-  aspect-ratio: 2.2;
-  overflow: hidden;
-  border-radius: 16px;
-  background: #17110c;
-  border: 1px solid rgb(255 255 255 / 0.18);
-  box-shadow: 0 20px 45px -20px rgb(0 0 0 / 0.6);
-}
-@media (width >= 64rem) { .hero-slide-thumb { aspect-ratio: 27 / 16; border-radius: 20px; } }
 .hero-slide-meta {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 16px 10px 4px;
+  padding: 4px 2px;
 }
-@media (width >= 64rem) { .hero-slide-meta { padding: 18px 16px 2px 10px; } }
+@media (width >= 64rem) { .hero-slide-meta { align-items: flex-end; padding: 4px 6px; } }
 .hero-slide-meta p { margin: 0; }
 .hero-slide-index {
   display: block;
@@ -392,13 +382,15 @@
   justify-content: center;
   width: clamp(44px, 3.3cqw, 56px);
   aspect-ratio: 1;
-  border: 1px solid rgb(255 255 255 / 0.22);
+  background: #181716;
+  border: 1px solid rgb(255 255 255 / 0.14);
   border-radius: 9999px;
   color: #f1efe9;
   cursor: pointer;
+  box-shadow: 0 10px 24px -12px rgb(0 0 0 / 0.7);
   transition: background-color 0.2s, border-color 0.2s;
 }
-.hero-arrow:hover { background: rgb(255 255 255 / 0.1); border-color: rgb(255 255 255 / 0.35); }
+.hero-arrow:hover { background: #242220; border-color: rgb(255 255 255 / 0.24); }
 .hero-arrow:focus-visible { outline: 2px solid #f1efe9; outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) {
   .hero-card.is-intro { animation: none; }

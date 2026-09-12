@@ -31,8 +31,11 @@ export function BookingFlow() {
       <div ref={ref} className="mt-16 grid gap-10 lg:grid-cols-12 lg:gap-12">
         <ol className="order-2 lg:order-1 lg:col-span-4">
           {steps.map((s, i) => (
-            <li key={s.n} className="flex min-h-[38vh] items-center lg:min-h-[60vh]">
-              <motion.div animate={{ opacity: i === active ? 1 : 0.28 }} transition={{ duration: 0.4 }} className="w-full">
+            <li key={s.n} className="flex items-center py-8 lg:min-h-[40vh] lg:py-0">
+              {/* Below lg every step carries its own capture, so nothing is dimmed: a
+                  faded image reads as broken, not inactive. From lg the sticky panel
+                  shows the active step and the list fades the rest. */}
+              <motion.div animate={{ opacity: i === active ? 1 : 0.28 }} transition={{ duration: 0.4 }} className="w-full max-lg:!opacity-100">
                 <div className="flex items-end justify-between gap-6">
                   <h3 className="text-2xl font-semibold tracking-tight">{s.title}</h3>
                   {/* Bottom-aligned with the title, at the end of the row */}

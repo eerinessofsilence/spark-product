@@ -102,13 +102,16 @@ export function RoomShowcase() {
   const [started, setStarted] = useState(false)
   const [auto, setAuto] = useState(true)
 
-  // Demo: switch the filters on one at a time, hold, clear, repeat.
+  // Demo: switch the first three filters on one at a time, hold, clear, repeat.
+  // Three is the sweet spot: the rail visibly narrows (8 → 5 → 4 → 3 cards) but
+  // never collapses to a couple of cards and a field of empty track.
+  const DEMO_STEPS = 3
   useEffect(() => {
     if (!started || !auto || reduce) return
     let step = 0
     const t = setInterval(() => {
-      step = (step + 1) % (tags.length + 3)
-      setActive(step === 0 ? [] : tags.slice(0, Math.min(step, tags.length)).map((_, i) => i))
+      step = (step + 1) % (DEMO_STEPS + 3)
+      setActive(step === 0 ? [] : tags.slice(0, Math.min(step, DEMO_STEPS)).map((_, i) => i))
     }, 1300)
     return () => clearInterval(t)
   }, [started, auto, reduce])
@@ -159,6 +162,9 @@ export function RoomShowcase() {
       <div className="container-site mt-10 flex flex-wrap items-baseline gap-x-4 gap-y-3">
         <span className="text-xs font-medium tracking-[0.1em] text-muted-foreground uppercase">Filter</span>
         <FilterTags active={active} onToggle={toggle} onEnter={() => setStarted(true)} />
+        <span className="ml-auto text-sm tabular-nums text-muted-foreground" aria-live="polite">
+          {visible.length} of {cards.length} rooms
+        </span>
       </div>
 
       {/* Draggable rail of real room cards, edge-to-edge like the product's room rails */}
@@ -171,7 +177,7 @@ export function RoomShowcase() {
           dragElastic={0.08}
           onDragStart={() => (dragged.current = true)}
           onDragEnd={() => setTimeout(() => (dragged.current = false), 50)}
-          className="flex cursor-grab gap-5 px-[max(3rem,calc((100vw-1400px)/2+3rem))] active:cursor-grabbing"
+          className="flex cursor-grab gap-5 px-8 active:cursor-grabbing"
         >
           <AnimatePresence initial={false} mode="popLayout">
             {visible.map((c, i) => (

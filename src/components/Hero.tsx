@@ -1,5 +1,5 @@
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { useEffect, useState } from 'react'
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
 import { HeroHeader } from './HeroHeader'
 import { ease } from './motion'
 
@@ -34,16 +34,25 @@ export function Hero() {
   const t = (delay: number, duration: number) => (reduce ? { duration: 0 } : { duration, ease, delay })
   const slide = slides[i]
 
+  // Parallax: as the card scrolls out, the photo drifts down at a fraction of
+  // the scroll speed. It is scaled from its bottom edge so the extra 15% sits
+  // above the card, and the drift never exposes a gap at the top.
+  const cardRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: cardRef, offset: ['start start', 'end start'] })
+  const mediaY = useTransform(scrollYProgress, [0, 1], ['0%', '15%'])
+
   return (
     <section id="top" className="hero-shell" aria-labelledby="hero-heading">
+      <HeroHeader />
+
       <div
+        ref={cardRef}
         className={`hero-card ${intro ? 'is-intro' : ''}`}
         onAnimationEnd={(e) => e.animationName === 'hero-grow' && setIntro(false)}
       >
-        <HeroHeader />
-
         <motion.div
           className="hero-media"
+          style={reduce ? undefined : { y: mediaY, scale: 1.15, originY: 1 }}
           initial={reduce ? false : { opacity: 0, filter: 'blur(16px)' }}
           animate={{ opacity: 1, filter: 'blur(0px)' }}
           transition={t(1.1, 1.1)}
@@ -85,22 +94,6 @@ export function Hero() {
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={t(1.9, 0.85)}
         >
-          <div className="hero-slide-thumb">
-            <AnimatePresence mode="sync">
-              <motion.img
-                key={slide.src}
-                src={slide.src}
-                alt=""
-                aria-hidden
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1.9, ease: 'easeInOut' }}
-                loading={i === 0 ? 'eager' : 'lazy'}
-                decoding="async"
-              />
-            </AnimatePresence>
-          </div>
           <div className="hero-slide-meta">
             <div className="min-w-0">
               <AnimatePresence mode="wait" initial={false}>
