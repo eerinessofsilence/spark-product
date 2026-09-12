@@ -34,7 +34,7 @@ Typography, as shipped in the product:
 - Headings carry no italic accent word and no numbered eyebrow: one plain statement per section
 - Display: `.text-display` — weight 700, letter-spacing −0.028em, line-height 1.05
 - Headings h1–h3: weight 700, letter-spacing −0.022em
-- Hero wordmark: Jost 300 (self-hosted woff2), uppercase, line-height 0.915 — the oversized three-line "STAY / SPHE / RE" in the hero card
+- Hero wordmark: Jost 900 (self-hosted woff2), uppercase, line-height 0.915 — the oversized two-line "STAY / SPHERE" in the hero card
 - Body: 15–18px, `leading-relaxed`; small labels 12–14px, uppercase eyebrows tracked +0.12–0.14em
 
 All tokens live in `src/index.css` and are exposed to Tailwind through `@theme inline`.
@@ -43,7 +43,7 @@ All tokens live in `src/index.css` and are exposed to Tailwind through `@theme i
 
 The page opens on a dark inset card (`.hero-card`, `src/components/Hero.tsx`): header row on top
 (wordmark, one pill per section, CTA), the property photography edge to edge below it, the product
-name as an oversized three-line wordmark, and a glass slide card (index, label, prev/next) bottom right.
+name as an oversized two-line wordmark, and a glass slide card (index, label, prev/next) bottom right.
 Geometry is expressed in container units so the composition keeps its proportions at any viewport.
 On load the card grows out of a header-height strip, the header fills in left to right, the photo
 un-blurs, the title rises line by line, then the slide card — all skipped under `prefers-reduced-motion`.

@@ -2,7 +2,7 @@ import { motion, type TargetAndTransition, type Transition } from 'motion/react'
 import { useState } from 'react'
 import { NAV_LINKS } from '../lib/nav'
 
-type Tone = 'dark' | 'light' | 'glass'
+type Tone = 'dark' | 'light'
 
 const tones: Record<Tone, { link: string; lit: string; glider: string }> = {
   dark: {
@@ -14,12 +14,6 @@ const tones: Record<Tone, { link: string; lit: string; glider: string }> = {
     link: 'px-3.5 py-2 text-sm font-medium text-ink/70',
     lit: 'text-ink',
     glider: 'bg-stone',
-  },
-  /** Plain links on frosted ink: no highlight pill, the label just brightens. */
-  glass: {
-    link: 'px-3 py-2 text-sm font-medium text-white/75 xl:text-base',
-    lit: 'text-white',
-    glider: '',
   },
 }
 

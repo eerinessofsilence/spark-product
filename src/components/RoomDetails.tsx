@@ -7,7 +7,7 @@ import { ArrowUpRight, Shot } from './ui'
 
 const RATE = 560 // Corner Suite, per night
 const CITY_FEE = 5 // per night
-const PARTNER_MARKUP = 1.12 // what the same stay costs on the demo partner site
+const PARTNER_MARKUP = 1.18 // what the same stay costs on the demo partner site, matching the 18% commission stat above
 const CHECK_IN = new Date(2026, 10, 5) // Thu 5 Nov 2026, as in the demo
 const eur = new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' })
 const day = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
@@ -64,7 +64,7 @@ function StayCard() {
         <Money value={eur.format(total)} className="text-display text-3xl" />
       </div>
       <p className="mt-2 text-sm text-muted-foreground">
-        <span className="font-semibold text-accent">{eur.format(partner - total)} less</span> than the {eur.format(partner)} demo partner-site price. A simulated comparison, not a live rate.
+        <span className="font-semibold text-accent-strong">{eur.format(partner - total)} less</span> than the {eur.format(partner)} demo partner-site price. A simulated comparison, not a live rate.
       </p>
 
       <a href={href} target="_blank" rel="noreferrer" className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-ink px-6 text-base font-semibold text-primary-foreground transition-colors hover:bg-primary-hover">
@@ -168,32 +168,35 @@ const toneClasses = {
 
 export function RoomDetails() {
   return (
-    <section id="room" className="container-site pt-32 sm:pt-40 lg:pt-52" aria-labelledby="room-heading">
-      <AnimatedHeading id="room-heading" className="text-display max-w-[16ch] text-4xl sm:text-5xl lg:text-6xl" text="More than a room card." />
-      <FadeIn delay={0.15}>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-          Gallery, pricing, policies and availability, all on the page a guest is already looking at, not buried behind another click.
-        </p>
-      </FadeIn>
+    <section id="room" className="pt-32 sm:pt-40 lg:pt-52" aria-labelledby="room-heading">
+      <div className="container-site">
+        <AnimatedHeading id="room-heading" className="text-display max-w-[16ch] text-4xl sm:text-5xl lg:text-6xl" text="More than a room card." />
+        <FadeIn delay={0.15}>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            Gallery, pricing, policies and availability, all on the page a guest is already looking at, not buried behind another click.
+          </p>
+        </FadeIn>
 
-      <div className="relative mt-14 grid gap-6 lg:grid-cols-12 lg:gap-8">
-        <Panel className="lg:col-span-8">
-          {/* The gallery capture opens the real room page, and says so on hover */}
-          <a href={`${STAYSPHERE_URL}rooms?checkIn=2026-11-05&checkOut=2026-11-08&adults=2&children=0`} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-[28px]" aria-label="Corner Suite gallery: open the room in StaySphere">
-            <Shot src="/ui/d-room-gallery.webp" alt="Corner Suite gallery with 360° view and thumbnails" width={1856} height={1284} className="transition-transform duration-700 ease-out group-hover:scale-[1.02]" />
-            <span aria-hidden className="pointer-events-none absolute inset-0 bg-ink/0 transition-colors duration-300 group-hover:bg-ink/[0.06]" />
-            <span aria-hidden className="pointer-events-none absolute top-4 right-4 inline-flex translate-y-2 items-center gap-1.5 rounded-full bg-ink px-3.5 py-2 text-xs font-semibold text-primary-foreground opacity-0 shadow-soft transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-              Open in StaySphere <ArrowUpRight className="size-3.5" />
-            </span>
-          </a>
-        </Panel>
-        <Parallax amount={50} className="lg:col-span-4 lg:self-end lg:-ml-20">
-          <StayCard />
-        </Parallax>
+        <div className="relative mt-14 grid gap-6 lg:grid-cols-12 lg:gap-8">
+          <Panel className="lg:col-span-8">
+            {/* The gallery capture opens the real room page, and says so on hover */}
+            <a href={`${STAYSPHERE_URL}rooms?checkIn=2026-11-05&checkOut=2026-11-08&adults=2&children=0`} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-[28px]" aria-label="Corner Suite gallery: open the room in StaySphere">
+              <Shot src="/ui/d-room-gallery.webp" alt="Corner Suite gallery with 360° view and thumbnails" width={1856} height={1284} className="transition-transform duration-700 ease-out group-hover:scale-[1.02]" />
+              <span aria-hidden className="pointer-events-none absolute inset-0 bg-ink/0 transition-colors duration-300 group-hover:bg-ink/[0.06]" />
+              <span aria-hidden className="pointer-events-none absolute top-4 right-4 inline-flex translate-y-2 items-center gap-1.5 rounded-full bg-ink px-3.5 py-2 text-xs font-semibold text-primary-foreground opacity-0 shadow-soft transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                Open in StaySphere <ArrowUpRight className="size-3.5" />
+              </span>
+            </a>
+          </Panel>
+          <Parallax amount={50} className="lg:col-span-4 lg:self-end lg:-ml-20">
+            <StayCard />
+          </Parallax>
+        </div>
       </div>
 
-      {/* Six icon tiles, in the spirit of a hotel's amenity grid */}
-      <ul className="mt-20 grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 lg:mt-28 lg:gap-y-12">
+      {/* Six icon tiles, in the spirit of a hotel's amenity grid — narrow container:
+          dense, centred, character-capped copy reads better with more edge room */}
+      <ul className="container-narrow mt-20 grid grid-cols-2 gap-x-4 gap-y-10 sm:grid-cols-3 lg:mt-28 lg:gap-y-12">
         {points.map((p, i) => (
           <motion.li
             key={p.title}

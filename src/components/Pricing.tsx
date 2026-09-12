@@ -89,7 +89,7 @@ export function Pricing() {
   const [yearly, setYearly] = useState(true)
 
   return (
-    <section id="pricing" className="container-site pt-32 sm:pt-40 lg:pt-48" aria-labelledby="pricing-heading">
+    <section id="pricing" className="container-site pt-32 sm:pt-40 lg:pt-52" aria-labelledby="pricing-heading">
       <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
         <div className="lg:col-span-7">
           <AnimatedHeading id="pricing-heading" className="text-display text-4xl sm:text-5xl lg:text-6xl" text="One flat fee. No commission." />

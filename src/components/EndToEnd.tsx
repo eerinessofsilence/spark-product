@@ -150,7 +150,7 @@ export function EndToEnd() {
         <AnimatedHeading id="flow-heading" className="text-display max-w-[20ch] text-4xl sm:text-5xl lg:text-6xl" text="Search. Room. Services. Review. Confirmation." />
         <FadeIn delay={0.15}>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            Five stages, one uninterrupted scroll. Follow the guest from the first search to the confirmation screen without a single page reload.
+            One uninterrupted scroll. Follow the guest from the first search to the confirmation screen without a single page reload.
           </p>
         </FadeIn>
       </div>
@@ -168,7 +168,7 @@ export function EndToEnd() {
               {stages.map((s, i) => {
                 const lit = pinned ? i >= from && i < from + VISIBLE : i === active
                 return (
-                  <li key={s.label} className={`transition-colors duration-700 ${lit ? 'text-white' : 'text-white/35'}`} aria-current={lit ? 'step' : undefined}>
+                  <li key={s.label} className={`transition-colors duration-700 ${lit ? 'text-white' : 'text-white/45'}`} aria-current={lit ? 'step' : undefined}>
                     {s.label}
                   </li>
                 )

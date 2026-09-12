@@ -10,7 +10,7 @@ export function FAQ({ items }: { items: [string, string][] }) {
         return (
           <div key={q}>
             <dt>
-              <button type="button" onClick={() => setOpen(isOpen ? null : i)} aria-expanded={isOpen} className="flex w-full items-center justify-between gap-6 py-5 text-left text-lg font-semibold">
+              <button type="button" onClick={() => setOpen(isOpen ? null : i)} aria-expanded={isOpen} className="flex w-full items-center justify-between gap-6 py-5 text-left text-lg font-semibold tracking-tight">
                 {q}
                 <motion.span animate={{ rotate: isOpen ? 45 : 0 }} transition={{ duration: 0.3 }} className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-stone">
                   <svg viewBox="0 0 20 20" className="size-4" fill="none" aria-hidden><path d="M10 4v12M4 10h12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>

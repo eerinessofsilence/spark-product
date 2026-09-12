@@ -45,14 +45,6 @@ const columns: Column[] = [
   },
 ]
 
-/** Point these at the real profiles; the icons are the product's 1.6-stroke line style. */
-const social: { label: string; href: string; icon: React.ReactNode }[] = [
-  { label: 'X', href: '/', icon: <path d="M4 4l16 16M20 4 4 20" /> },
-  { label: 'LinkedIn', href: '/', icon: <><rect x="3.5" y="3.5" width="17" height="17" rx="3" /><path d="M8 10v6M8 7v.01M12 16v-3.5a2 2 0 1 1 4 0V16M12 10v6" /></> },
-  { label: 'Instagram', href: '/', icon: <><rect x="3.5" y="3.5" width="17" height="17" rx="5" /><circle cx="12" cy="12" r="3.6" /><circle cx="17.2" cy="6.8" r="0.9" fill="currentColor" stroke="none" /></> },
-  { label: 'YouTube', href: '/', icon: <><rect x="2.5" y="5.5" width="19" height="13" rx="4" /><path d="m10 9 5 3-5 3z" fill="currentColor" stroke="none" /></> },
-]
-
 function Badge({ children }: { children: string }) {
   return (
     <span className="ml-2 inline-flex items-center rounded-[5px] border border-white/25 px-1.5 py-[2px] align-middle text-xs font-bold tracking-[0.08em] text-white/85 uppercase">
@@ -129,7 +121,7 @@ export function Footer() {
                           {l.badge && <Badge>{l.badge}</Badge>}
                         </a>
                       ) : (
-                        <span className="inline-flex items-center text-white/35">
+                        <span className="inline-flex items-center text-white/45">
                           {l.label}
                           {l.badge && <Badge>{l.badge}</Badge>}
                         </span>
@@ -144,23 +136,8 @@ export function Footer() {
 
         <Wordmark />
 
-        <div className="mt-8 flex flex-col gap-6 text-xs text-white/45 lg:flex-row lg:items-center lg:justify-between">
+        <div className="mt-8 text-xs text-white/45">
           <p>© 2026 Spark StaySphere. Asteria Cove is a fictional property; rates, availability and payments in the demo are simulated.</p>
-          <ul className="flex items-center gap-1" aria-label="Social">
-            {social.map((s) => (
-              <li key={s.label}>
-                <a
-                  href={s.href}
-                  aria-label={s.label}
-                  className="inline-flex size-9 items-center justify-center rounded-full text-white/55 transition-colors duration-200 hover:bg-white/10 hover:text-white"
-                >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="size-5" aria-hidden>
-                    {s.icon}
-                  </svg>
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </footer>

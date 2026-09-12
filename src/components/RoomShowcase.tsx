@@ -150,7 +150,7 @@ export function RoomShowcase() {
         <AnimatedHeading id="rooms-heading" className="text-display max-w-[16ch] text-4xl sm:text-5xl lg:text-6xl" text="Rooms that sell the experience." />
         <FadeIn delay={0.15}>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            Twenty rooms, one card. Each answers what it looks like, how big it is and what it costs tonight.
+            Twenty rooms, one card format. Each answers what it looks like, how big it is and what it costs tonight.
           </p>
         </FadeIn>
       </div>
@@ -171,7 +171,7 @@ export function RoomShowcase() {
           dragElastic={0.08}
           onDragStart={() => (dragged.current = true)}
           onDragEnd={() => setTimeout(() => (dragged.current = false), 50)}
-          className="flex cursor-grab gap-5 px-5 active:cursor-grabbing sm:px-6 lg:px-[max(1.5rem,calc((100vw-1400px)/2+1.5rem))]"
+          className="flex cursor-grab gap-5 px-[max(3rem,calc((100vw-1400px)/2+3rem))] active:cursor-grabbing"
         >
           <AnimatePresence initial={false} mode="popLayout">
             {visible.map((c, i) => (
@@ -192,18 +192,24 @@ export function RoomShowcase() {
                   onClick={(e) => dragged.current && e.preventDefault()}
                   whileHover={{ y: -8, rotate: -0.6 }}
                   transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                  className="group relative block overflow-hidden rounded-[20px]"
+                  className="group relative block"
                   aria-label={`${c.name}: open in StaySphere`}
                 >
-                  <Shot src={c.src} alt={`Room card: ${c.name}`} width={498} height={572} className="pointer-events-none select-none" tile />
-                  <span aria-hidden className="pointer-events-none absolute inset-0 rounded-[20px] bg-ink/0 transition-colors duration-300 group-hover:bg-ink/[0.06]" />
-                  {/* Sits over the photo, clear of the room name and rate baked into the lower part of the capture */}
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute top-3 right-3 inline-flex -translate-y-2 items-center gap-1.5 rounded-full bg-ink px-3 py-1.5 text-xs font-semibold text-primary-foreground opacity-0 shadow-soft transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
-                  >
-                    Open in StaySphere <ArrowUpRight className="size-3.5" />
-                  </span>
+                  {/* Clipping lives on a non-animating wrapper: rounding + overflow-hidden on the same
+                      element that also carries the hover transform lets the tile's box-shadow bleed
+                      past the rounded corners mid-rotation in Chromium, so the transform is kept here
+                      on the outer <a> instead. */}
+                  <div className="relative overflow-hidden rounded-[20px]">
+                    <Shot src={c.src} alt={`Room card: ${c.name}`} width={498} height={572} className="pointer-events-none select-none" tile />
+                    <span aria-hidden className="pointer-events-none absolute inset-0 rounded-[20px] bg-ink/0 transition-colors duration-300 group-hover:bg-ink/[0.06]" />
+                    {/* Sits over the photo, clear of the room name and rate baked into the lower part of the capture */}
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute top-3 right-3 inline-flex -translate-y-2 items-center gap-1.5 rounded-full bg-ink px-3 py-1.5 text-xs font-semibold text-primary-foreground opacity-0 shadow-soft transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+                    >
+                      Open in StaySphere <ArrowUpRight className="size-3.5" />
+                    </span>
+                  </div>
                 </motion.a>
               </motion.li>
             ))}

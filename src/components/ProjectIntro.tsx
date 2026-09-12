@@ -52,7 +52,7 @@ function Stat({ from, to, suffix = '', was, label, start, delay }: (typeof stats
           </motion.span>
         )}
       </p>
-      <p className="mx-auto mt-3 max-w-[20ch] text-xs font-medium text-muted-foreground/70">{was}</p>
+      <p className="mx-auto mt-3 max-w-[20ch] text-xs font-medium text-muted-foreground">{was}</p>
     </FadeIn>
   )
 }
@@ -62,14 +62,17 @@ export function ProjectIntro() {
   const inView = useInView(ref, { once: true, margin: '0px 0px -10% 0px' })
 
   return (
-    <section id="intro" className="container-site pt-32 sm:pt-40 lg:pt-52" aria-labelledby="intro-heading">
-      <AnimatedHeading id="intro-heading" className="text-display max-w-3xl text-4xl sm:text-5xl lg:text-6xl" text="A better way to book direct." />
-      <FadeIn delay={0.15}>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-          Independent hotels depend on third-party platforms that add friction, dilute the brand and move the guest relationship away from the hotel. StaySphere brings that journey back.
-        </p>
-      </FadeIn>
-      <div ref={ref} className="mt-14 grid gap-x-8 gap-y-12 pt-2 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4">
+    <section id="intro" className="pt-32 sm:pt-40 lg:pt-52" aria-labelledby="intro-heading">
+      <div className="container-site">
+        <AnimatedHeading id="intro-heading" className="text-display max-w-3xl text-4xl sm:text-5xl lg:text-6xl" text="A better way to book direct." />
+        <FadeIn delay={0.15}>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
+            Independent hotels depend on third-party platforms that add friction, dilute the brand and move the guest relationship away from the hotel. StaySphere brings that journey back.
+          </p>
+        </FadeIn>
+      </div>
+      {/* Narrow container: four centred, character-capped stat columns read better with more edge room */}
+      <div ref={ref} className="container-narrow mt-14 grid gap-x-8 gap-y-12 pt-2 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4">
         {stats.map((s, i) => (
           <Stat key={s.label} {...s} start={inView} delay={0.2 + i * 0.12} />
         ))}

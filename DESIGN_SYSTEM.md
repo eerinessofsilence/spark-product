@@ -104,9 +104,10 @@ Rules:
 | `.text-display` (utility) | weight 700, tracking `-0.028em`, leading `1.05` |
 | `h1`–`h3` (base layer) | display stack, weight 700, tracking `-0.022em` |
 | Body | weight 400, `leading-relaxed` |
-| Nav pills | `font-[450]`, tracking `0.01em`, uppercase |
+| Nav pills (hero header, dark tone) | `font-[450]`, tracking `0.01em`, uppercase |
+| Nav links (floating nav, light tone) | `font-medium`, sentence case, no tracking |
 | Eyebrows / step labels | `text-xs`, uppercase, `tracking-[0.05em]` → `sm:tracking-[0.12em]` |
-| Hero wordmark | Jost 300, uppercase, leading `0.915`, tracking `-0.012em` |
+| Hero wordmark | Jost 900, uppercase, leading `0.915`, tracking `-0.012em` |
 
 ### Hierarchy
 
@@ -115,7 +116,7 @@ a size — if nothing fits, the level is missing, not the size.
 
 | Level | Role | Size | Classes |
 | --- | --- | --- | --- |
-| **H1** | Hero wordmark, once per page | fluid | `.hero-title` (Jost 300, container units) |
+| **H1** | Hero wordmark, once per page | fluid | `.hero-title` (Jost 900, container units) |
 | **H2** | Section heading | 32 → 48 → 56 | `text-display text-4xl sm:text-5xl lg:text-6xl` |
 | **H2°** | Closing CTA only — the one climax | 32 → 48 → 64 | `…lg:text-7xl` |
 | **H3** | Block heading, card title | 24 | `text-2xl font-semibold tracking-tight` |
@@ -148,8 +149,17 @@ eyebrows, no italic accent word, no kicker line above the heading.
 
 ### Container
 
-`.container-site` — `max-width: 1400px`, centered, `padding-inline: 1.25rem`, `1.5rem` from
-`40rem` up. The floating nav uses a slightly tighter `max-w-[1360px]` so it reads as inset.
+Three fixed horizontal padding tiers, applied flat (no responsive step):
+
+| Tier | Padding | Where |
+| --- | --- | --- |
+| Hero | `32px` (`px-8`) | `--hero-pad` in `.hero-card` — the hero section only |
+| Content | `48px` (`px-12`) | `.container-site` — the standard section container |
+| Narrow | `64px` (`px-16`) | `.container-narrow` — text-heavy/single-column sections |
+
+`.container-site` and `.container-narrow` both cap at `max-width: 1400px`, centered, differing
+only in `padding-inline`. The floating nav uses a slightly tighter `max-w-[1360px]` so it reads
+as inset.
 
 ### Vertical rhythm
 
