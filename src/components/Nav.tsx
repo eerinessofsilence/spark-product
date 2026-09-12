@@ -39,7 +39,7 @@ export function Nav() {
       animate={{ y: visible ? 0 : -32, opacity: visible ? 1 : 0 }}
       transition={{ duration: 0.45, ease }}
       inert={!visible}
-      className={`fixed inset-x-0 top-0 z-40 px-3 pt-3 sm:px-6 sm:pt-5 ${visible ? '' : 'pointer-events-none'}`}
+      className={`fixed inset-x-0 top-0 z-40 px-12 pt-3 sm:pt-5 ${visible ? '' : 'pointer-events-none'}`}
     >
       <div className="mx-auto max-w-[1360px]">
         <div className="relative flex h-14 items-center rounded-full border border-black/[0.06] bg-white/90 pr-2 pl-5 text-ink shadow-soft-lg backdrop-blur-xl sm:h-[72px] sm:pr-3 sm:pl-7">
