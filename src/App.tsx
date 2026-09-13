@@ -5,13 +5,12 @@ import { Nav } from './components/Nav'
 import { Hero } from './components/Hero'
 import { ProjectIntro } from './components/ProjectIntro'
 import { BookingFlow } from './components/BookingFlow'
-import { Platform } from './components/Platform'
-import { SearchExperience } from './components/SearchExperience'
 import { RoomShowcase } from './components/RoomShowcase'
 import { RoomDetails } from './components/RoomDetails'
 import { ServicesSection } from './components/ServicesSection'
 import { EndToEnd } from './components/EndToEnd'
 import { ProductPrinciples } from './components/ProductPrinciples'
+import { Testimonial } from './components/Testimonial'
 import { Pricing } from './components/Pricing'
 import { FinalCTA } from './components/FinalCTA'
 import { Footer } from './components/Footer'
@@ -27,13 +26,12 @@ export default function App() {
         <Hero />
         <ProjectIntro />
         <BookingFlow />
-        <Platform />
-        <SearchExperience />
         <RoomShowcase />
         <RoomDetails />
         <ServicesSection />
         <EndToEnd />
         <ProductPrinciples />
+        <Testimonial />
         <Pricing />
         <FinalCTA />
       </main>

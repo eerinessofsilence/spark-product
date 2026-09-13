@@ -238,33 +238,30 @@
    Geometry is in container units (cqw/cqh) so the composition keeps its
    proportions at every viewport.
 ------------------------------------------------------------------- */
-/* Custom properties live here, not on .hero-card, so the standalone
-   .hero-head sibling (see below) can read them too. */
 .hero-shell {
   --hero-head: 56px;
   --hero-r: 32px;
   --hero-pad: 2rem; /* same 32px as .container-site: the hero is not its own tier */
-  --hero-head-gap: 10px;
   /* Sides sit on the same 32px as every other section; only the vertical inset is the hero's own. */
   padding-block: var(--hero-inset);
   padding-inline: var(--hero-pad);
 }
 @media (width >= 64rem) {
-  .hero-shell { --hero-head: 72px; --hero-r: 44px; }
+  .hero-shell { --hero-head: 64px; --hero-r: 44px; }
 }
 .hero-card {
   position: relative;
   container-type: size;
   overflow: hidden;
   isolation: isolate;
-  height: calc(100svh - var(--hero-inset) * 2 - var(--hero-head) - var(--hero-head-gap));
-  min-height: 606px;
+  height: calc(100svh - var(--hero-inset) * 2);
+  min-height: 680px;
   border-radius: var(--hero-r);
   background: #0f0f0f;
   color: #e4e4e2;
 }
 @media (width >= 64rem) {
-  .hero-card { min-height: 678px; }
+  .hero-card { min-height: 780px; }
 }
 /* Intro: the card fades in as a header-height strip, then grows down. */
 .hero-card.is-intro {
@@ -278,12 +275,14 @@
   to { clip-path: inset(0 0 0 0 round var(--hero-r)); }
 }
 
-/* A separate pill sitting above the photo card, not the top slice of the
-   same card shape — a small gap (--hero-head-gap) keeps them apart. The
-   pill itself is styled in HeroHeader.tsx with the same classes as the
-   floating Nav; this just places it. */
+/* Laid over the photo, not a bar above it: no background of its own — the
+   row's own height comes from Tailwind classes in HeroHeader.tsx, this just
+   pins it to the top of the card, above the photo and its scrim. */
 .hero-head {
-  margin-bottom: var(--hero-head-gap);
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 3;
+  padding-inline: var(--hero-pad);
 }
 
 /* The photo fills the card edge to edge; the card's own overflow-hidden
@@ -303,22 +302,33 @@
   height: 100%;
   object-fit: cover;
 }
-/* Our photography is daylight; a light scrim keeps the thin wordmark legible. */
+/* Our photography is daylight; scrims at top and bottom keep the header row
+   and the wordmark legible without a background of their own. */
 .hero-media::after {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
   background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.55) 0%, rgb(0 0 0 / 0) 22%),
     linear-gradient(90deg, rgb(0 0 0 / 0.45) 0%, rgb(0 0 0 / 0.2) 38%, rgb(0 0 0 / 0) 68%),
     linear-gradient(0deg, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.22) 30%, rgb(0 0 0 / 0) 52%);
 }
 
-.hero-title {
+/* Title and search bar share one absolutely-positioned block, so the search
+   bar sits in normal flow right under the title at every viewport instead of
+   two separately-positioned elements that would need to agree on a gap. */
+.hero-lead {
   position: absolute;
-  top: 6cqh;
+  top: calc(var(--hero-head) + 6cqh);
   left: calc(var(--hero-pad) + 2.4cqw);
+  right: var(--hero-pad);
   z-index: 2;
+}
+@media (width >= 64rem) {
+  .hero-lead { top: calc(18.5cqh - 0.1025em); }
+}
+.hero-title {
   margin: 0;
   pointer-events: none;
   font-family: var(--font-hero-stack);
@@ -334,8 +344,58 @@
    cap top sits 0.1025em below the line box, so the box is lifted by that much
    to put the cap top exactly at 18.5% of the card height, as in the reference. */
 @media (width >= 64rem) {
-  .hero-title { top: calc(18.5cqh - 0.1025em); font-size: min(13cqw, 32cqh); }
+  .hero-title { font-size: min(13cqw, 32cqh); }
 }
+
+.hero-search {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 5cqh;
+  padding: 6px;
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.96);
+  box-shadow: var(--shadow-soft-lg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.hero-search:hover { background: #fff; }
+@media (width >= 40rem) { .hero-search { margin-top: 3.4cqh; } }
+@media (width >= 64rem) { .hero-search { margin-top: 3.6cqh; } }
+.hero-search-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+@media (width >= 40rem) { .hero-search-field { padding: 10px 16px; font-size: 15px; } }
+.hero-search-field--guests { display: none; }
+@media (width >= 40rem) { .hero-search-field--guests { display: flex; } }
+.hero-search-divider { width: 1px; height: 20px; background: rgb(0 0 0 / 0.1); flex-shrink: 0; }
+.hero-search-divider--guests { display: none; }
+@media (width >= 40rem) { .hero-search-divider--guests { display: block; } }
+.hero-search-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  aspect-ratio: 1;
+  margin-left: 4px;
+  border-radius: 9999px;
+  background: var(--ink);
+  color: #fff;
+  flex-shrink: 0;
+  transition: background-color 0.2s;
+}
+@media (width >= 40rem) { .hero-search-submit { width: 44px; } }
+.hero-search:hover .hero-search-submit { background: var(--primary-hover); }
 
 .hero-slide-card {
   position: absolute;

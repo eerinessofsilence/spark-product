@@ -1,6 +1,6 @@
-import { AnimatePresence, animate, motion, useMotionValue, useReducedMotion } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
-import { BOOKING_URL } from '../lib/links'
+import { STAYSPHERE_URL } from '../lib/links'
 import { AnimatedHeading } from './AnimatedHeading'
 import { FadeIn } from './motion'
 import { ArrowUpRight, Shot } from './ui'
@@ -16,17 +16,25 @@ const tags: Tag[] = [
   { label: 'Hide fully booked', tone: 'rose', key: 'available' },
 ]
 
-/** The eight room cards from the demo, with the facts the filters look at. */
+// Same dates as the rest of the demo links on this page.
+const STAY_QUERY = 'checkIn=2026-11-05&checkOut=2026-11-08&adults=2&children=0'
+
+/** The eight room cards from the demo, with the facts the filters look at.
+    slug is the room's own page in the demo, not the search results list. */
 const cards = [
-  { n: 1, name: 'Corner Suite', sea: true, king: true, suite: true, balcony: true, available: true },
-  { n: 3, name: 'Coastal Twin', sea: false, king: false, suite: false, balcony: false, available: false },
-  { n: 2, name: 'Deluxe Sea View', sea: true, king: true, suite: false, balcony: true, available: true },
-  { n: 4, name: 'Sea View Room', sea: true, king: false, suite: false, balcony: true, available: true },
-  { n: 5, name: 'Cove Studio', sea: false, king: false, suite: false, balcony: true, available: true },
-  { n: 6, name: 'Pool Terrace Room', sea: false, king: true, suite: false, balcony: false, available: false },
-  { n: 7, name: 'Asteria Penthouse', sea: true, king: true, suite: true, balcony: true, available: true },
-  { n: 8, name: 'Two-Bedroom Sea Residence', sea: true, king: true, suite: false, balcony: false, available: true },
-].map((c) => ({ ...c, src: `/ui/d-roomcard-${c.n}.webp` }))
+  { n: 1, slug: 'corner-suite', name: 'Corner Suite', sea: true, king: true, suite: true, balcony: true, available: true },
+  { n: 3, slug: 'coastal-twin', name: 'Coastal Twin', sea: false, king: false, suite: false, balcony: false, available: false },
+  { n: 2, slug: 'deluxe-sea', name: 'Deluxe Sea View', sea: true, king: true, suite: false, balcony: true, available: true },
+  { n: 4, slug: 'sea-view-room', name: 'Sea View Room', sea: true, king: false, suite: false, balcony: true, available: true },
+  { n: 5, slug: 'cove-studio', name: 'Cove Studio', sea: false, king: false, suite: false, balcony: true, available: true },
+  { n: 6, slug: 'pool-terrace', name: 'Pool Terrace Room', sea: false, king: true, suite: false, balcony: false, available: false },
+  { n: 7, slug: 'asteria-penthouse', name: 'Asteria Penthouse', sea: true, king: true, suite: true, balcony: true, available: true },
+  { n: 8, slug: 'two-bedroom-residence', name: 'Two-Bedroom Sea Residence', sea: true, king: true, suite: false, balcony: false, available: true },
+].map((c) => ({ ...c, src: `/ui/d-roomcard-${c.n}.webp`, href: `${STAYSPHERE_URL}rooms/${c.slug}?${STAY_QUERY}` }))
+
+/** How many of the eight cards match each facet, shown in its chip — same idea as
+    a marketplace's "Villas · 14 available", scaled to this demo's eight rooms. */
+const tagCounts: Record<Tag['key'], number> = Object.fromEntries(tags.map((t) => [t.key, cards.filter((c) => c[t.key]).length])) as Record<Tag['key'], number>
 
 const idle: Record<Tone, string> = {
   stone: 'bg-stone text-[#5f5e58]',
@@ -88,7 +96,7 @@ function FilterTags({ active, onToggle, onEnter }: { active: number[]; onToggle:
                 </motion.span>
               )}
             </AnimatePresence>
-            {t.label}
+            {t.label} <span className={isOn ? 'opacity-70' : 'opacity-60'}>· {tagCounts[t.key]}</span>
           </motion.button>
         )
       })}
@@ -117,44 +125,40 @@ export function RoomShowcase() {
   }, [started, auto, reduce])
 
   const toggle = (i: number) => {
+    // The demo may already have some tags lit when the visitor clicks: that
+    // state was never chosen by them, so a first manual click replaces it
+    // rather than toggling on top of it (which used to silently combine the
+    // demo's current filters with whatever the visitor meant to pick alone).
+    setActive((a) => (auto ? [i] : a.includes(i) ? a.filter((k) => k !== i) : [...a, i]))
     setAuto(false)
-    setActive((a) => (a.includes(i) ? a.filter((k) => k !== i) : [...a, i]))
   }
 
   const visible = cards.filter((c) => active.every((i) => c[tags[i].key]))
 
-  // Drag rail: constraints follow the rail's real width, and the rail slides
-  // back to the start whenever the set of cards changes.
-  const track = useRef<HTMLDivElement>(null)
+  // Native horizontal scroll with snap (wheel, trackpad, touch, keyboard all
+  // work for free) instead of a drag-only track; it re-centres to the start
+  // whenever the filtered set changes.
   const list = useRef<HTMLUListElement>(null)
-  const x = useMotionValue(0)
-  const [drag, setDrag] = useState(0)
   useEffect(() => {
-    const el = track.current
-    const ul = list.current
-    if (!el || !ul) return
-    const calc = () => setDrag(Math.max(0, ul.scrollWidth - el.clientWidth))
-    calc()
-    const ro = new ResizeObserver(calc)
-    ro.observe(el)
-    ro.observe(ul)
-    return () => ro.disconnect()
-  }, [])
-  useEffect(() => {
-    animate(x, 0, { type: 'spring', stiffness: 200, damping: 28 })
-  }, [visible.length, x])
-
-  // A drag must not turn into a click on the card underneath.
-  const dragged = useRef(false)
+    list.current?.scrollTo({ left: 0, behavior: 'smooth' })
+  }, [visible.length])
 
   return (
-    <section id="rooms" className="pt-32 sm:pt-40 lg:pt-52" aria-labelledby="rooms-heading">
-      <div className="container-site">
-        <AnimatedHeading id="rooms-heading" className="text-display max-w-[16ch] text-4xl sm:text-5xl lg:text-6xl" text="Rooms that sell the experience." />
-        <FadeIn delay={0.15}>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            Twenty rooms, one card format. Each answers what it looks like, how big it is and what it costs tonight.
-          </p>
+    <section id="rooms" className="pt-24 sm:pt-32 lg:pt-40" aria-labelledby="rooms-heading">
+      <div className="container-site flex flex-wrap items-end justify-between gap-x-8 gap-y-6">
+        <div className="max-w-xl">
+          <AnimatedHeading id="rooms-heading" className="text-display max-w-[16ch] text-4xl sm:text-5xl lg:text-6xl" text="Rooms that sell the experience." />
+          <FadeIn delay={0.15}>
+            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+              Twenty rooms, one card format. Each answers what it looks like, how big it is and what it costs tonight.
+            </p>
+          </FadeIn>
+        </div>
+        <FadeIn delay={0.2}>
+          <a href={`${STAYSPHERE_URL}rooms?${STAY_QUERY}`} target="_blank" rel="noreferrer" className="group inline-flex shrink-0 items-center gap-2 text-base font-semibold text-ink">
+            See all 20 rooms
+            <span className="inline-flex size-10 items-center justify-center rounded-full bg-stone text-ink transition-all duration-300 group-hover:bg-ink group-hover:text-primary-foreground"><ArrowUpRight /></span>
+          </a>
         </FadeIn>
       </div>
 
@@ -167,61 +171,52 @@ export function RoomShowcase() {
         </span>
       </div>
 
-      {/* Draggable rail of real room cards, edge-to-edge like the product's room rails */}
-      <div className="mt-6 overflow-hidden" ref={track}>
-        <motion.ul
-          ref={list}
-          style={{ x }}
-          drag="x"
-          dragConstraints={{ left: -drag, right: 0 }}
-          dragElastic={0.08}
-          onDragStart={() => (dragged.current = true)}
-          onDragEnd={() => setTimeout(() => (dragged.current = false), 50)}
-          className="flex cursor-grab gap-5 px-8 active:cursor-grabbing"
-        >
-          <AnimatePresence initial={false} mode="popLayout">
-            {visible.map((c, i) => (
-              <motion.li
-                key={c.src}
-                layout
-                initial={{ opacity: 0, scale: 0.9, y: 24 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.86, y: 12 }}
-                transition={{ type: 'spring', stiffness: 260, damping: 26, delay: i * 0.03 }}
-                className="w-[240px] shrink-0 sm:w-[280px]"
+      {/* Rail of real room cards, edge-to-edge like the product's room rails. Native
+          scroll + snap: wheel, trackpad, touch and keyboard all work, not drag-only. */}
+      <ul
+        ref={list}
+        className="mt-6 flex snap-x snap-proximity gap-5 overflow-x-auto px-8 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        <AnimatePresence initial={false} mode="popLayout">
+          {visible.map((c, i) => (
+            <motion.li
+              key={c.src}
+              layout
+              initial={{ opacity: 0, scale: 0.9, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.86, y: 12 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 26, delay: i * 0.03 }}
+              className="w-[240px] shrink-0 snap-start sm:w-[280px]"
+            >
+              <motion.a
+                href={c.href}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ y: -8, rotate: -0.6 }}
+                transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+                className="group relative block"
+                aria-label={`${c.name}: open in StaySphere`}
               >
-                <motion.a
-                  href={BOOKING_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  draggable={false}
-                  onClick={(e) => dragged.current && e.preventDefault()}
-                  whileHover={{ y: -8, rotate: -0.6 }}
-                  transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                  className="group relative block"
-                  aria-label={`${c.name}: open in StaySphere`}
-                >
-                  {/* Clipping lives on a non-animating wrapper: rounding + overflow-hidden on the same
-                      element that also carries the hover transform lets the tile's box-shadow bleed
-                      past the rounded corners mid-rotation in Chromium, so the transform is kept here
-                      on the outer <a> instead. */}
-                  <div className="relative overflow-hidden rounded-[20px]">
-                    <Shot src={c.src} alt={`Room card: ${c.name}`} width={498} height={572} className="pointer-events-none select-none" tile />
-                    <span aria-hidden className="pointer-events-none absolute inset-0 rounded-[20px] bg-ink/0 transition-colors duration-300 group-hover:bg-ink/[0.06]" />
-                    {/* Sits over the photo, clear of the room name and rate baked into the lower part of the capture */}
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute top-3 right-3 inline-flex -translate-y-2 items-center gap-1.5 rounded-full bg-ink px-3 py-1.5 text-xs font-semibold text-primary-foreground opacity-0 shadow-soft transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
-                    >
-                      Open in StaySphere <ArrowUpRight className="size-3.5" />
-                    </span>
-                  </div>
-                </motion.a>
-              </motion.li>
-            ))}
-          </AnimatePresence>
-        </motion.ul>
-      </div>
+                {/* Clipping lives on a non-animating wrapper: rounding + overflow-hidden on the same
+                    element that also carries the hover transform lets the tile's box-shadow bleed
+                    past the rounded corners mid-rotation in Chromium, so the transform is kept here
+                    on the outer <a> instead. */}
+                <div className="relative overflow-hidden rounded-tile">
+                  <Shot src={c.src} alt={`Room card: ${c.name}`} width={498} height={572} className="pointer-events-none select-none" tile />
+                  <span aria-hidden className="pointer-events-none absolute inset-0 rounded-tile bg-ink/0 transition-colors duration-300 group-hover:bg-ink/[0.06]" />
+                  {/* Sits over the photo, clear of the room name and rate baked into the lower part of the capture */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute top-3 right-3 inline-flex -translate-y-2 items-center gap-1.5 rounded-full bg-ink px-3 py-1.5 text-xs font-semibold text-primary-foreground opacity-0 shadow-soft transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+                  >
+                    Open in StaySphere <ArrowUpRight className="size-3.5" />
+                  </span>
+                </div>
+              </motion.a>
+            </motion.li>
+          ))}
+        </AnimatePresence>
+      </ul>
     </section>
   )
 }

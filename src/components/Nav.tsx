@@ -11,6 +11,11 @@ import { ArrowUpRight } from './ui'
 
 const HREFS = NAV_LINKS.map((l) => l.href)
 
+// Matches the hero header's own scroll-away point (hero-inset 12px + its h-14/h-16
+// row), so this fades in right as that one scrolls out — no gap, no overlap —
+// instead of an arbitrary pixel count that only coincidentally lined up before.
+const heroHeaderBottom = () => 12 + (window.innerWidth >= 1024 ? 64 : 56)
+
 /**
  * Floating nav on frosted ink: wordmark left, plain links centred, a solid
  * light CTA right. The hero card carries its own header row, so this one
@@ -23,9 +28,9 @@ const HREFS = NAV_LINKS.map((l) => l.href)
 export function Nav() {
   const reduce = useReducedMotion()
   const { open, setOpen, navHidden } = useMenu()
-  const [scrolled, setScrolled] = useState(() => typeof window !== 'undefined' && window.scrollY > 160)
+  const [scrolled, setScrolled] = useState(() => typeof window !== 'undefined' && window.scrollY > heroHeaderBottom())
   const { scrollY } = useScroll()
-  useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 160))
+  useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > heroHeaderBottom()))
   const active = useActiveSection(HREFS)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
@@ -43,23 +48,26 @@ export function Nav() {
       inert={!visible}
       className={`fixed inset-x-0 top-0 z-40 px-8 pt-3 sm:pt-5 ${visible ? '' : 'pointer-events-none'}`}
     >
-      <div className="relative flex h-14 items-center rounded-full border border-black/[0.06] bg-white/90 pr-2 pl-5 text-ink shadow-soft-lg backdrop-blur-xl sm:h-[72px] sm:pr-3 sm:pl-7">
+      <div className="relative flex h-14 items-center gap-3 rounded-full border border-ink/[0.07] bg-white/85 pr-2 pl-5 text-ink shadow-soft-lg backdrop-blur-2xl backdrop-saturate-150 lg:h-16 lg:pr-2.5 lg:pl-6">
         <motion.a href="#top" className="flex shrink-0 items-center gap-3" aria-label="Spark StaySphere, back to top" whileHover={reduce ? undefined : { scale: 1.04, rotate: -2 }}>
-          <img src="/brand/spark-logo-on-light.svg" alt="Spark" className="h-6 w-auto sm:h-7" />
-          <span className="hidden text-base font-semibold tracking-tight text-ink/85 sm:inline">StaySphere</span>
+          <img src="/brand/spark-logo-on-light.svg" alt="Spark" className="h-6 w-auto lg:h-7" />
+          <span aria-hidden className="hidden h-4 w-px bg-ink/15 sm:block" />
+          <span className="hidden text-base font-medium tracking-tight text-ink/60 sm:inline">StaySphere</span>
         </motion.a>
 
         <NavLinks label="Product page, floating" active={active} className="absolute left-1/2 hidden -translate-x-1/2 gap-4 lg:flex" />
 
         <div className="ml-auto flex items-center gap-2">
-          <Magnetic className="hidden sm:inline-flex">
+          {/* Hidden below 460px: most phones don't have room for it next to the menu
+              button, which must stay reachable — that one's never hidden. */}
+          <Magnetic className="hidden min-[460px]:inline-flex">
             <a
               href={STAYSPHERE_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex h-11 items-center gap-2 rounded-full bg-ink px-6 text-base font-semibold whitespace-nowrap text-white transition-colors duration-200 hover:bg-[#2b2b2b] sm:h-12"
+              className="group inline-flex h-10 items-center gap-1.5 rounded-full bg-ink px-4 text-sm font-semibold whitespace-nowrap text-white transition-colors duration-200 hover:bg-primary-hover lg:h-11 lg:px-5"
             >
-              Explore StaySphere <ArrowUpRight />
+              Explore StaySphere <ArrowUpRight className="size-4 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5" />
             </a>
           </Magnetic>
           <button
@@ -67,7 +75,7 @@ export function Nav() {
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="mobile-menu"
-            className="inline-flex size-10 items-center justify-center rounded-full bg-black/5 text-ink transition-colors hover:bg-black/10 lg:hidden"
+            className="inline-flex size-10 items-center justify-center rounded-full bg-ink/5 text-ink transition-colors hover:bg-ink/10 lg:hidden"
             aria-label={open ? 'Close menu' : 'Open menu'}
           >
             <svg viewBox="0 0 20 20" className="size-5" fill="none" aria-hidden>
@@ -77,7 +85,7 @@ export function Nav() {
         </div>
       </div>
 
-      <div id="mobile-menu" hidden={!open} className="mt-2 rounded-[28px] border border-black/[0.06] bg-white/95 p-3 text-ink shadow-soft-lg backdrop-blur-xl lg:hidden">
+      <div id="mobile-menu" hidden={!open} className="mt-2 rounded-card border border-ink/[0.07] bg-white/95 p-3 text-ink shadow-soft-lg backdrop-blur-xl lg:hidden">
         <nav className="flex flex-col" aria-label="Product page, mobile">
           {NAV_LINKS.map((l) => (
             <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="rounded-full px-4 py-3 text-base font-medium text-ink/80 transition-colors hover:bg-black/5 hover:text-ink">

@@ -89,7 +89,7 @@ export function Pricing() {
   const [yearly, setYearly] = useState(true)
 
   return (
-    <section id="pricing" className="container-site pt-32 sm:pt-40 lg:pt-52" aria-labelledby="pricing-heading">
+    <section id="pricing" className="container-site pt-24 sm:pt-32 lg:pt-40" aria-labelledby="pricing-heading">
       {/* Toggle sits on the heading's baseline row from lg; the heading is a single line
           there, so a flex row is safer than a 12-col grid that used to split at 1024. */}
       <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -125,7 +125,7 @@ export function Pricing() {
           return (
             <Reveal as="li" key={p.name} delay={i * 90} className="flex">
               <article
-                className={`flex w-full flex-col rounded-[28px] p-7 sm:p-8 ${
+                className={`flex w-full flex-col rounded-card p-7 sm:p-8 ${
                   p.featured ? 'bg-ink text-[#F7F5F0] shadow-soft-lg' : 'bg-card text-ink shadow-soft'
                 }`}
                 aria-label={`${p.name} plan`}

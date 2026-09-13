@@ -45,7 +45,7 @@ function StageCard({ stage, index, tick }: { stage: Stage; index: number; tick: 
   const frame = reduce ? 0 : Math.floor(Math.max(0, tick - index) / 3) % n
   const f = stage.frames[frame]
   return (
-    <li className="relative h-full shrink-0 snap-start overflow-hidden rounded-[18px] bg-card sm:rounded-[24px]">
+    <li className="relative h-full shrink-0 snap-start overflow-hidden rounded-tile bg-card">
       <AnimatePresence initial={false}>
         <motion.img
           key={f.src}
@@ -145,7 +145,7 @@ export function EndToEnd() {
   }
 
   return (
-    <section id="flow" className="pt-32 sm:pt-40 lg:pt-52" aria-labelledby="flow-heading">
+    <section id="flow" className="pt-24 sm:pt-32 lg:pt-40" aria-labelledby="flow-heading">
       <div className="container-site">
         <AnimatedHeading id="flow-heading" className="text-display max-w-[20ch] text-4xl sm:text-5xl lg:text-6xl" text="Search. Room. Services. Review. Confirmation." />
         <FadeIn delay={0.15}>

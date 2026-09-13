@@ -64,7 +64,7 @@ src/
     MenuProvider.tsx         mobile menu state
     Nav.tsx                  floating compact nav (appears after the hero)
     HeroHeader.tsx  Hero.tsx  hero card: header row, photo slider, wordmark
-    ProjectIntro.tsx  BookingFlow.tsx  Platform.tsx  SearchExperience.tsx
+    ProjectIntro.tsx  BookingFlow.tsx
     RoomShowcase.tsx  RoomDetails.tsx  ServicesSection.tsx  EndToEnd.tsx
     ProductPrinciples.tsx  Pricing.tsx  FinalCTA.tsx  Footer.tsx
 public/

@@ -11,7 +11,9 @@ const PARTNER_MARKUP = 1.18 // what the same stay costs on the demo partner site
 const CHECK_IN = new Date(2026, 10, 5) // Thu 5 Nov 2026, as in the demo
 const eur = new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' })
 const day = new Intl.DateTimeFormat('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
-const iso = (d: Date) => d.toISOString().slice(0, 10)
+// Local date parts, not toISOString(): that converts through UTC first, so
+// east-of-UTC visitors got a checkIn/checkOut one day behind what the card shows.
+const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 
 /**
  * The product's stay card, built for real instead of captured: pick the
@@ -28,7 +30,7 @@ function StayCard() {
   const partner = Math.round(total * PARTNER_MARKUP)
   const href = `${STAYSPHERE_URL}rooms?checkIn=${iso(CHECK_IN)}&checkOut=${iso(checkOut)}&adults=2&children=0`
   return (
-    <div className="rounded-[28px] bg-card p-6 shadow-soft-lg sm:p-7" aria-live="polite">
+    <div className="rounded-card bg-card p-6 shadow-soft-lg sm:p-7" aria-live="polite">
       <p className="text-sm text-muted-foreground">Your stay</p>
       <div className="mt-3 grid grid-cols-2 gap-4">
         <div>
@@ -41,7 +43,7 @@ function StayCard() {
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-4 rounded-2xl bg-stone/60 py-2 pr-2 pl-4">
+      <div className="mt-4 flex items-center justify-between gap-4 rounded-tile bg-stone/60 py-2 pr-2 pl-4">
         <span className="text-sm">
           <Money value={`${nights} ${nights === 1 ? 'night' : 'nights'}`} className="font-semibold" /> · 2 adults
         </span>
@@ -166,7 +168,7 @@ const toneClasses = {
 
 export function RoomDetails() {
   return (
-    <section id="room" className="pt-32 sm:pt-40 lg:pt-52" aria-labelledby="room-heading">
+    <section id="room" className="pt-24 sm:pt-32 lg:pt-40" aria-labelledby="room-heading">
       <div className="container-site">
         <AnimatedHeading id="room-heading" className="text-display max-w-[16ch] text-4xl sm:text-5xl lg:text-6xl" text="More than a room card." />
         <FadeIn delay={0.15}>
@@ -178,7 +180,7 @@ export function RoomDetails() {
         <div className="relative mt-14 grid gap-6 lg:grid-cols-12 lg:gap-8">
           <Panel className="lg:col-span-8">
             {/* The gallery capture opens the real room page, and says so on hover */}
-            <a href={`${STAYSPHERE_URL}rooms?checkIn=2026-11-05&checkOut=2026-11-08&adults=2&children=0`} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-[28px]" aria-label="Corner Suite gallery: open the room in StaySphere">
+            <a href={`${STAYSPHERE_URL}rooms?checkIn=2026-11-05&checkOut=2026-11-08&adults=2&children=0`} target="_blank" rel="noreferrer" className="group relative block overflow-hidden rounded-card" aria-label="Corner Suite gallery: open the room in StaySphere">
               <Shot src="/ui/d-room-gallery.webp" alt="Corner Suite gallery with 360° view and thumbnails" width={1856} height={1284} className="transition-transform duration-700 ease-out group-hover:scale-[1.02]" />
               <span aria-hidden className="pointer-events-none absolute inset-0 bg-ink/0 transition-colors duration-300 group-hover:bg-ink/[0.06]" />
               <span aria-hidden className="pointer-events-none absolute top-4 right-4 inline-flex translate-y-2 items-center gap-1.5 rounded-full bg-ink px-3.5 py-2 text-xs font-semibold text-primary-foreground opacity-0 shadow-soft transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">

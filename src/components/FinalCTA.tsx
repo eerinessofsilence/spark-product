@@ -11,8 +11,8 @@ export function FinalCTA() {
   const bgY = useTransform(scrollYProgress, [0, 1], ['-12%', '12%'])
   const bgScale = useTransform(scrollYProgress, [0, 1], [1.15, 1])
   return (
-    <section id="cta" className="container-site pt-32 sm:pt-40 lg:pt-52" aria-labelledby="cta-heading">
-      <div ref={ref} className="relative overflow-hidden rounded-[28px] bg-ink text-[#F7F5F0]">
+    <section id="cta" className="container-site pt-24 sm:pt-32 lg:pt-40" aria-labelledby="cta-heading">
+      <div ref={ref} className="relative overflow-hidden rounded-card bg-ink text-[#F7F5F0]">
         <motion.img style={{ y: bgY, scale: bgScale }} src="/photos/rooms-asteria-penthouse-terrace.webp" alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
         <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/10" />
         <div className="relative flex min-h-[34rem] flex-col items-center justify-center p-6 text-center sm:p-12 lg:min-h-[42rem] lg:p-16">

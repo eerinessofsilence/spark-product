@@ -24,7 +24,7 @@ export function FAQ({ items }: { items: [string, string][] }) {
                 type="button"
                 onClick={() => setOpen(isOpen ? null : i)}
                 aria-expanded={isOpen}
-                className="-mx-4 flex w-full items-center gap-4 rounded-2xl px-4 py-5 text-left transition-colors duration-200 hover:bg-stone/50"
+                className="-mx-4 flex w-full items-center gap-4 rounded-tile px-4 py-5 text-left transition-colors duration-200 hover:bg-stone/50"
               >
                 <span aria-hidden className={`inline-flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold tabular-nums ${badge[tone]}`}>
                   {String(i + 1).padStart(2, '0')}

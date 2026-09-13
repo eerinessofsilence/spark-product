@@ -20,7 +20,7 @@ export function BookingFlow() {
   useMotionValueEvent(scrollYProgress, 'change', (v) => setActive(Math.min(steps.length - 1, Math.max(0, Math.floor(v * steps.length)))))
 
   return (
-    <section id="experience" className="container-site pt-32 sm:pt-40 lg:pt-52" aria-labelledby="experience-heading">
+    <section id="experience" className="container-site pt-24 sm:pt-32 lg:pt-40" aria-labelledby="experience-heading">
       <AnimatedHeading id="experience-heading" className="text-display max-w-[13ch] text-4xl sm:text-5xl lg:text-6xl" text="One journey, start to finish." />
       <FadeIn delay={0.15}>
         <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
@@ -51,7 +51,7 @@ export function BookingFlow() {
                   </motion.span>
                 </div>
                 <p className="mt-3 max-w-sm text-base leading-relaxed text-muted-foreground">{s.text}</p>
-                <div className="mt-6 overflow-hidden rounded-[20px] shadow-soft lg:hidden">
+                <div className="mt-6 overflow-hidden rounded-tile shadow-soft lg:hidden">
                   <img src={s.src} alt={s.alt} loading="lazy" className={`aspect-[4/3] w-full bg-card ${s.fit}`} />
                 </div>
               </motion.div>

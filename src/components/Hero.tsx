@@ -1,16 +1,48 @@
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
+import { BOOKING_URL } from '../lib/links'
 import { HeroHeader } from './HeroHeader'
 import { ease } from './motion'
 
+// One coast, one light: every slide is Mediterranean and warm, so the
+// carousel reads as four views of the same place rather than four hotels.
+// `pos` is the object-position: where the photo's subject sits, so cover-cropping
+// keeps it (the balcony's breakfast table is in the lower third of a portrait
+// frame; the bedroom's sea is right of a dead-centre door mullion).
 const slides = [
+  { src: '/photos/hotel-cove.webp', label: ['The', 'cove'], alt: 'Asteria Cove: the pool on the rocks above the bay' },
+  { src: '/photos/rooms-deluxe-sea-balcony.webp', label: ['Sea-view', 'balcony'], alt: 'Asteria Cove: breakfast on a sea-view balcony', pos: '50% 78%' },
+  { src: '/photos/rooms-deluxe-sea-bedroom.webp', label: ['Deluxe', 'sea view'], alt: 'Asteria Cove: deluxe sea-view bedroom', pos: '62% 50%' },
   { src: '/photos/hotel-pool.webp', label: ['Infinity', 'pool'], alt: 'Asteria Cove: the infinity pool above the sea' },
-  { src: '/photos/rooms-pool-terrace-terrace.webp', label: ['Palm', 'terrace'], alt: 'Asteria Cove: pool terrace under the palms' },
-  { src: '/photos/rooms-deluxe-sea-bedroom.webp', label: ['Deluxe', 'sea view'], alt: 'Asteria Cove: deluxe sea-view bedroom' },
-  { src: '/photos/rooms-panorama-suite-terrace.webp', label: ['Panorama', 'suite'], alt: 'Asteria Cove: the panorama suite terrace' },
 ]
 const TITLE = ['Stay', 'Sphere']
 const INTERVAL = 6500
+
+function IconCalendar() {
+  return (
+    <svg viewBox="0 0 20 20" className="size-4 shrink-0 sm:size-[18px]" fill="none" aria-hidden>
+      <rect x="3.5" y="4.5" width="13" height="12" rx="2" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M3.5 8h13M6.5 3v3M13.5 3v3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  )
+}
+function IconGuests() {
+  return (
+    <svg viewBox="0 0 20 20" className="size-4 shrink-0 sm:size-[18px]" fill="none" aria-hidden>
+      <circle cx="7.2" cy="6.7" r="2.4" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M2.8 16c.5-3 2-4.6 4.4-4.6s3.9 1.6 4.4 4.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M12.8 4.6a2.4 2.4 0 0 1 0 4.6M14.6 11.7c1.9.5 3 1.9 3.4 4.3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  )
+}
+function IconSearch() {
+  return (
+    <svg viewBox="0 0 20 20" className="size-4 sm:size-[18px]" fill="none" aria-hidden>
+      <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.6" />
+      <path d="m17 17-3.5-3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  )
+}
 
 /**
  * Dark inset hero card: header row on top, the property photography
@@ -24,12 +56,22 @@ export function Hero() {
   const [intro, setIntro] = useState(!reduce)
   const [i, setI] = useState(0)
   const n = slides.length
-  const go = (d: number) => setI((v) => (v + d + n) % n)
+  // Any manual navigation hands control to the visitor for good — an
+  // auto-advancing carousel that keeps moving a photo someone just picked is
+  // the opposite of "look at this one". Hover/focus only pauses, since the
+  // visitor may come back to just look rather than to choose.
+  const [auto, setAuto] = useState(true)
+  const [paused, setPaused] = useState(false)
+  const go = (d: number) => {
+    setAuto(false)
+    setI((v) => (v + d + n) % n)
+  }
 
   useEffect(() => {
+    if (!auto || paused || reduce) return
     const t = setTimeout(() => setI((v) => (v + 1) % n), INTERVAL)
     return () => clearTimeout(t)
-  }, [i, n])
+  }, [i, n, auto, paused, reduce])
 
   const t = (delay: number, duration: number) => (reduce ? { duration: 0 } : { duration, ease, delay })
   const slide = slides[i]
@@ -43,13 +85,13 @@ export function Hero() {
 
   return (
     <section id="top" className="hero-shell" aria-labelledby="hero-heading">
-      <HeroHeader />
-
       <div
         ref={cardRef}
         className={`hero-card ${intro ? 'is-intro' : ''}`}
         onAnimationEnd={(e) => e.animationName === 'hero-grow' && setIntro(false)}
       >
+        <HeroHeader />
+
         <motion.div
           className="hero-media"
           style={reduce ? undefined : { y: mediaY, scale: 1.15, originY: 1 }}
@@ -62,6 +104,7 @@ export function Hero() {
               key={slide.src}
               src={slide.src}
               alt={slide.alt}
+              style={{ objectPosition: slide.pos }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -72,20 +115,54 @@ export function Hero() {
           </AnimatePresence>
         </motion.div>
 
-        <h1 id="hero-heading" className="hero-title">
-          <span className="sr-only">StaySphere. The direct-booking experience, built for independent hotels.</span>
-          {TITLE.map((line, k) => (
-            <motion.span
-              key={line}
-              aria-hidden
-              initial={reduce ? false : { opacity: 0, y: '0.3em', filter: 'blur(10px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={t(1.2 + k * 0.18, 1.05)}
-            >
-              {line}
-            </motion.span>
-          ))}
-        </h1>
+        <div className="hero-lead">
+          <h1 id="hero-heading" className="hero-title">
+            <span className="sr-only">StaySphere. The direct-booking experience, built for independent hotels.</span>
+            {TITLE.map((line, k) => (
+              <motion.span
+                key={line}
+                aria-hidden
+                initial={reduce ? false : { opacity: 0, y: '0.3em', filter: 'blur(10px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                transition={t(1.2 + k * 0.18, 1.05)}
+              >
+                {line}
+              </motion.span>
+            ))}
+          </h1>
+
+          {/* The product's own search bar, made real: it opens the live demo already
+              searched for these dates, so the first thing a visitor can do is the
+              thing the whole product is about. */}
+          <motion.a
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="hero-search group"
+            aria-label="Search this stay in StaySphere: Thu 5 Nov to Sun 8 Nov, 2 adults"
+            initial={reduce ? false : { opacity: 0, y: 16, filter: 'blur(8px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={t(1.55, 0.85)}
+          >
+            <span className="hero-search-field">
+              <IconCalendar />
+              <span>Thu 5 Nov</span>
+            </span>
+            <span aria-hidden className="hero-search-divider" />
+            <span className="hero-search-field">
+              <IconCalendar />
+              <span>Sun 8 Nov</span>
+            </span>
+            <span aria-hidden className="hero-search-divider hero-search-divider--guests" />
+            <span className="hero-search-field hero-search-field--guests">
+              <IconGuests />
+              <span>2 adults</span>
+            </span>
+            <span aria-hidden className="hero-search-submit">
+              <IconSearch />
+            </span>
+          </motion.a>
+        </div>
 
         <motion.aside
           className="hero-slide-card"
@@ -93,6 +170,10 @@ export function Hero() {
           initial={reduce ? false : { opacity: 0, y: 18, filter: 'blur(8px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={t(1.9, 0.85)}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onFocus={() => setPaused(true)}
+          onBlur={() => setPaused(false)}
         >
           <div className="hero-slide-meta">
             <div className="min-w-0">

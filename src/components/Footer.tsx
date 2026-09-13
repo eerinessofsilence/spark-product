@@ -15,8 +15,6 @@ const columns: Column[] = [
     links: [
       { label: 'Overview', href: '#top' },
       { label: 'Experience', href: '#experience' },
-      { label: 'Platform', href: '#platform' },
-      { label: 'Search', href: '#search' },
       { label: 'Rooms', href: '#rooms' },
       { label: 'Room details', href: '#room' },
       { label: 'Services', href: '#services' },
@@ -44,7 +42,7 @@ const columns: Column[] = [
 
 function Badge({ children }: { children: string }) {
   return (
-    <span className="ml-2 inline-flex items-center rounded-[5px] border border-white/25 px-1.5 py-[2px] align-middle text-xs font-bold tracking-[0.08em] text-white/85 uppercase">
+    <span className="ml-2 inline-flex items-center rounded-full border border-white/25 px-1.5 py-[2px] align-middle text-xs font-bold tracking-[0.08em] text-white/85 uppercase">
       {children}
     </span>
   )
@@ -78,7 +76,7 @@ export function Footer() {
   return (
     <footer className="container-site mt-8 pb-6" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">Site footer</h2>
-      <div className="rounded-[28px] bg-ink px-6 pt-14 pb-8 text-[#F7F5F0] sm:px-10 sm:pt-20 lg:px-16 lg:pt-24">
+      <div className="rounded-card bg-ink px-6 pt-14 pb-8 text-[#F7F5F0] sm:px-10 sm:pt-20 lg:px-16 lg:pt-24">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,3fr)] lg:gap-16">
           <div>
             <a href="#top" className="inline-flex items-center gap-3" aria-label="Spark StaySphere, back to top">

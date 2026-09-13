@@ -104,7 +104,7 @@ Rules:
 | `.text-display` (utility) | weight 700, tracking `-0.028em`, leading `1.05` |
 | `h1`–`h3` (base layer) | display stack, weight 700, tracking `-0.022em` |
 | Body | weight 400, `leading-relaxed` |
-| Nav links (hero header and floating nav — one shared style) | `font-medium`, sentence case, no tracking |
+| Nav links (hero header and floating nav — one shared style) | `font-medium`, sentence case, no tracking; the group sits in a `bg-stone/60 p-1` track, the active/hover link is a white pill with `shadow-soft` |
 | Eyebrows / step labels | `text-xs`, uppercase, `tracking-[0.05em]` → `sm:tracking-[0.12em]` |
 | Hero wordmark | Jost 900, uppercase, leading `0.915`, tracking `-0.012em` |
 
@@ -126,13 +126,17 @@ a size — if nothing fits, the level is missing, not the size.
 | **Body-sm** | Copy inside dense tiles | 14 | `text-sm leading-relaxed text-muted-foreground` |
 | **Meta** | Captions, secondary values, footer links | 14 | `text-sm` |
 | **Micro** | Chips, badges, eyebrows, fine print | 12 | `text-xs font-medium` (uppercase + tracking for eyebrows) |
-| **Numeral** | Stats, prices, step numbers | 32 → 48 | `text-display text-4xl sm:text-5xl` |
+| **Numeral** | Prices, step numbers | 32 → 48 | `text-display text-4xl sm:text-5xl` |
+| **Numeral, hero stat** | The intro section's four drop-counters only | 48 → 64 | `text-5xl font-light tracking-[-0.03em] lg:text-7xl` — the one light-weight numeral; its unit/suffix is a step down in `text-accent` |
 
 ### Three rules that keep it honest
 
 1. **Nothing outranks its section.** No element may be larger than the H2 at the same breakpoint —
-   H1 is the only exception. This is why display numerals cap at 48: they sit under the 56 of the
-   heading above them, and merely match it at the narrower breakpoints.
+   H1 is the only exception. Most numerals cap at 48 to sit clearly under the 56 of the heading
+   above them. The intro's stat counters are the single exception (64 at `lg`): that section has
+   no display H2 to outrank — its heading is a two-tone `text-4xl` statement — so the numerals are
+   the largest thing in it by design, and they are set light (300) so the size reads as air, not
+   shout.
 2. **Text scales with its container, not with the viewport.** A grid that goes 1 → 2 → 4 columns
    makes its cards *narrower* as the screen grows, so titles inside it are flat (`text-2xl`, no
    `sm:` bump). Only full-width elements that genuinely get wider — section headings — scale up.
@@ -140,7 +144,9 @@ a size — if nothing fits, the level is missing, not the size.
    its own body by weight alone.
 
 Editorial rule carried over from the product: **one plain statement per section** — no numbered
-eyebrows, no italic accent word, no kicker line above the heading.
+eyebrows, no italic accent word, no kicker line above the heading. The intro is the one editorial
+exception: it uses dot-eyebrows (`● ABOUT STAYSPHERE`, `● THE DIFFERENCE IN NUMBERS`) and a
+two-tone statement (muted context line, ink claim) — a magazine opener, not a section heading.
 
 ---
 
@@ -164,7 +170,7 @@ use the same `px-8` directly (no wrapping `max-w-*`), so both read as one header
 
 | Step | Classes | px |
 | --- | --- | --- |
-| Section top padding | `pt-32 sm:pt-40 lg:pt-52` | 128 → 160 → 208 |
+| Section top padding | `pt-24 sm:pt-32 lg:pt-40` | 96 → 128 → 160 |
 | Heading → lede | `mt-6` | 24 |
 | Heading → content block | `mt-14` (also `mt-12`/`mt-16`/`mt-20`) | 56 |
 | Card padding | `p-7` | 28 |
@@ -193,8 +199,10 @@ CSS in `index.css` uses the same values in the modern form: `@media (width >= 64
 | `--radius-tile` | 20px | `rounded-tile` | Small tiles, inner shots |
 | — | full | `rounded-full` | Every button, pill, chip, icon button |
 
-> Prefer `rounded-card` / `rounded-tile` over the literal `rounded-[28px]` / `rounded-[20px]`.
-> Existing code still has literals in places; new code should use the token.
+> Always use `rounded-card` / `rounded-tile`, never the literal `rounded-[28px]` / `rounded-[20px]`
+> — the whole codebase is standardized on the tokens now, so a new literal is a regression, not a
+> style choice. Small text badges/chips use `rounded-full` like every other pill, never a bespoke
+> small radius (e.g. `rounded-[5px]`).
 
 Hero and device frames carry their own geometry: hero card 32px → 44px at `lg`, phone frame 44px
 (screen 36px), desktop frame 22px (screen 16px).
